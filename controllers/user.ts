@@ -53,13 +53,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     
     try {
         const { email } = req.body;
-        const userDelete = await User.findOne({ email });
-        if(!userDelete){
-            return res.status(400).json({
-                message: "El usuario no existe"
-            })
-        }
-        const user = await User.findOneAndDelete({ userDelete });
+        const user = await User.findOneAndDelete({ email });
         sendEmailDeleteAcount(email)
         res.json({
             message: "Usuario Eliminado"

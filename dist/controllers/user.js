@@ -59,13 +59,7 @@ exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email } = req.body;
-        const userDelete = yield users_1.default.findOne({ email });
-        if (!userDelete) {
-            return res.status(400).json({
-                message: "El usuario no existe"
-            });
-        }
-        const user = yield users_1.default.findOneAndDelete({ userDelete });
+        const user = yield users_1.default.findOneAndDelete({ email });
         (0, mailers_1.sendEmailDeleteAcount)(email);
         res.json({
             message: "Usuario Eliminado"
