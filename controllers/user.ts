@@ -50,8 +50,9 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const { email } = req.body;
+    
     try {
+        const { email } = req.body;
         const userDelete = await User.findOne({ email });
         if(!userDelete){
             return res.status(400).json({
