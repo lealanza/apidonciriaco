@@ -58,7 +58,7 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email } = req.body;
+        const { email } = req.params;
         const user = yield users_1.default.findOneAndDelete({ email });
         (0, mailers_1.sendEmailDeleteAcount)(email);
         res.json({

@@ -52,7 +52,7 @@ export const getUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
     
     try {
-        const { email } = req.body;
+        const { email } = req.params;
         const user = await User.findOneAndDelete({ email });
         sendEmailDeleteAcount(email)
         res.json({
