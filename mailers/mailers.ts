@@ -47,7 +47,7 @@ export const sendEmailResetPassword = async (to:string, password:string) => {
 export const sendEmailLogin = async (to:string, name:string) => {
     try {
         const mailOptions = {
-            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
             to,
             subject:"Inicio de sesion",
             text:`
@@ -63,7 +63,7 @@ export const sendEmailLogin = async (to:string, name:string) => {
 export const sendEmailDeleteAcount = async (to:string)=>{
     try {
         const mailOptions = {
-            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
             to,
             subject:"Eliminacion de cuenta",
             text:`
