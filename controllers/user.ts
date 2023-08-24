@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import User, { IUser } from "../models/users";
 import bcsrypt from "bcryptjs";
 import randomstring from "randomstring";
-import { sendEmail, sendEmailLogin, sendEmailResetPassword } from "../mailers/mailers";
+import { sendEmail, sendEmailLogin, sendEmailResetPassword, sendEmailDeleteAcount } from "../mailers/mailers";
 import { generateToken } from "../helpers/generateToken";
 import { RSC } from "next/dist/client/components/app-router-headers";
 
@@ -59,7 +59,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             })
         }
         const user = await User.findOneAndDelete({ userDelete });
-        sendEmailDeleteAcount(user.email)
+        sendEmailDeleteAcount({email})
         res.json({
             message: "Usuario Eliminado"
         })
