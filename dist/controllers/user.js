@@ -66,6 +66,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         const user = yield users_1.default.findOneAndDelete({ userDelete });
+        (0, mailers_1.sendEmailDeleteAcount)(email);
         res.json({
             message: "Usuario Eliminado"
         });
@@ -103,6 +104,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         (0, mailers_1.sendEmailLogin)(email, user.userName);
         res.json({
             message: "Login Correcto",
+            user,
+            token
         });
     }
     catch (error) {

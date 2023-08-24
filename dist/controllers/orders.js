@@ -50,8 +50,10 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 totalPrice,
             };
         });
+        const orderNumer = yield orders_1.default.countDocuments();
         const orderTotal = orderProducts.reduce((acc, curr) => acc + curr.totalPrice, 0);
         const order = new orders_1.default({
+            orderNumber: orderNumer + 1,
             user: userId,
             cellphone,
             direction,
@@ -143,7 +145,6 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 const user = yield users_1.default.findById(orderDetails === null || orderDetails === void 0 ? void 0 : orderDetails.user);
                 const userEmail = user === null || user === void 0 ? void 0 : user.email;
                 const orderStatus = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.status;
-                console.log({ userEmail, orderStatus });
                 (0, mailers_1.sendEmailConfirmed)(userEmail, updatedOrder);
                 const productIds = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.products.map((p) => p.product);
                 const quantities = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.products.map((p) => p.quantity);

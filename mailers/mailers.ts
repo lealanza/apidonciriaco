@@ -47,7 +47,7 @@ export const sendEmailResetPassword = async (to:string, password:string) => {
 export const sendEmailLogin = async (to:string, name:string) => {
     try {
         const mailOptions = {
-            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
             subject:"Inicio de sesion",
             text:`
@@ -63,7 +63,7 @@ export const sendEmailLogin = async (to:string, name:string) => {
 export const sendEmailDeleteAcount = async (to:string)=>{
     try {
         const mailOptions = {
-            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
             subject:"Eliminacion de cuenta",
             text:`
@@ -81,11 +81,12 @@ export const sendEmailConfirmed = async (to:string, order:IOrder) => {
     try {
         
         const mailOptions = {
-            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
             subject:"Has confirmado tu pedido",
             text:`
             Hola has confirmado tu pedido.
+            Pedido numero: ${order.orderNumber}.
             el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
             fecha: ${order.updatedAt.toString()}.
             `

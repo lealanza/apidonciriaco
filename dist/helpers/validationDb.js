@@ -18,7 +18,7 @@ const users_1 = __importDefault(require("../models/users"));
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existEmail = yield users_1.default.findOne({ email });
     if (existEmail && existEmail.verified) {
-        throw new Error("Email already exist");
+        throw new Error(`${email} already exist`);
     }
     if (existEmail && !existEmail.verified) {
         yield (0, mailers_1.sendEmail)(email, existEmail.name, existEmail.code);

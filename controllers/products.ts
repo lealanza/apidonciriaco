@@ -33,8 +33,8 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
     }
 }
 export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const product = await Product.findByIdAndDelete(id);
         if (!product) {
             res.status(404).json({ msg: "Producto no encontrado" });
@@ -71,9 +71,9 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
 }
 
 export const getProductsByCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { name } = req.body;
-    console.log({name})
+    
     try {
+        const { name } = req.body;
         const categoryDetails: ICategory | null = await Category.findOne({ name: name });
 
         if (!categoryDetails) {

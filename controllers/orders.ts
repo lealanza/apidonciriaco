@@ -41,8 +41,10 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
         totalPrice,
       };
     });
+    const orderNumer= await Order.countDocuments();
     const orderTotal = orderProducts.reduce((acc, curr) => acc + curr.totalPrice, 0);
     const order = new Order({
+      orderNumber:orderNumer+1,
       user: userId,
       cellphone,
       direction,
@@ -57,7 +59,6 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     await order.save();
     res.status(201).json({
       message: "Orden creada correctamente",
-      
       data: order,
     });
     
@@ -133,7 +134,6 @@ export const getOrderById = async (req: Request, res: Response) => {
       const user = await User.findById(orderDetails?.user);
       const userEmail = user?.email;
       const orderStatus= updatedOrder?.status;
-      console.log({userEmail, orderStatus});
       sendEmailConfirmed(userEmail as string, updatedOrder);
       const productIds = updatedOrder?.products.map((p) => p.product);
       const quantities = updatedOrder?.products.map((p) => p.quantity);

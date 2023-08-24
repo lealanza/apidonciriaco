@@ -9,6 +9,8 @@ export interface IProductOrder extends IProduct {
 
 
 export interface IOrder {
+
+  orderNumber: number;
   user:ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -24,6 +26,7 @@ export interface IOrder {
 }
 
 const orderSchema = new Schema<IOrder>({
+  orderNumber:{type:Number},
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   
   cellphone: { type: String, required: true },

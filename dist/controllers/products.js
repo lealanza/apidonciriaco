@@ -50,8 +50,8 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getProducts = getProducts;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const product = yield products_1.default.findByIdAndDelete(id);
         if (!product) {
             res.status(404).json({ msg: "Producto no encontrado" });
@@ -89,9 +89,8 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.updateProduct = updateProduct;
 const getProductsByCategory = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
-    console.log({ name });
     try {
+        const { name } = req.body;
         const categoryDetails = yield categories_1.Category.findOne({ name: name });
         if (!categoryDetails) {
             res.status(404).json({ message: 'Categoría no encontrada' });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmailConfirmed = exports.sendEmailLogin = exports.sendEmailResetPassword = exports.sendEmail = void 0;
+exports.sendEmailConfirmed = exports.sendEmailDeleteAcount = exports.sendEmailLogin = exports.sendEmailResetPassword = exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
@@ -30,7 +30,6 @@ const sendEmail = (to, name, code) => __awaiter(void 0, void 0, void 0, function
             subject: "Codigo de verificacion de cuenta",
             text: `
             Hola ${name}, te enviamos este codigo de verificacion: ${code}.
-            
             `
         };
         yield transporter.sendMail(mailOptions);
@@ -58,16 +57,15 @@ const sendEmailResetPassword = (to, password) => __awaiter(void 0, void 0, void 
     }
 });
 exports.sendEmailResetPassword = sendEmailResetPassword;
-const sendEmailLogin = (to, name, location) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+const sendEmailLogin = (to, name) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
-            subject: "Has iniciado sesion",
+            subject: "Inicio de sesion",
             text: `
-            Hola ${name}, has iniciado sesion. ${new Date().toString()}.
-            Ubicacion: Latitude is ${(_a = location === null || location === void 0 ? void 0 : location.latitude) !== null && _a !== void 0 ? _a : 'unknown'}, Longitude is ${(_b = location === null || location === void 0 ? void 0 : location.longitude) !== null && _b !== void 0 ? _b : 'unknown'}.`
+            Hola ${name}, has iniciado sesion correctamente. ${new Date().toString()}.
+            `
         };
         yield transporter.sendMail(mailOptions);
     }
@@ -76,14 +74,32 @@ const sendEmailLogin = (to, name, location) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.sendEmailLogin = sendEmailLogin;
+const sendEmailDeleteAcount = (to) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const mailOptions = {
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+            to,
+            subject: "Eliminacion de cuenta",
+            text: `
+            Hola,tu cuenta fue eliminada correctamente.
+            `
+        };
+        yield transporter.sendMail(mailOptions);
+    }
+    catch (error) {
+        console.error("Error al enviar el correo de inicio de sesion ", error);
+    }
+});
+exports.sendEmailDeleteAcount = sendEmailDeleteAcount;
 const sendEmailConfirmed = (to, order) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const mailOptions = {
-            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
             subject: "Has confirmado tu pedido",
             text: `
             Hola has confirmado tu pedido.
+            Pedido numero: ${order.orderNumber}.
             el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
             fecha: ${order.updatedAt.toString()}.
             `
