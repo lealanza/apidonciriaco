@@ -32,7 +32,7 @@ userRoutes.post('/login',[
     errorHandler, 
     login)
 userRoutes.get('/get',errorHandler, getUser)
-userRoutes.delete('/delete',[
+userRoutes.delete('/deleteuser',[
     check('email', 'El email es obligarodio').not().isEmpty().normalizeEmail().isEmail(),
 ],errorHandler, deleteUser)
 userRoutes.patch('/reset',[
