@@ -19,9 +19,7 @@ export const sendEmail = async (to:string, name:string, code:string) => {
             subject:"Codigo de verificacion de cuenta",
             text:`
             Hola ${name}, te enviamos este codigo de verificacion: ${code}.
-            
             `
-        
         }
         await transporter.sendMail(mailOptions)
         console.log('Email enviado')
@@ -46,15 +44,15 @@ export const sendEmailResetPassword = async (to:string, password:string) => {
     }
 
 }
-export const sendEmailLogin = async (to:string, name:string, location?: { latitude: number; longitude:number }) => {
+export const sendEmailLogin = async (to:string, name:string) => {
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
-            subject:"Has iniciado sesion",
+            subject:"Inicio de sesion",
             text:`
-            Hola ${name}, has iniciado sesion. ${new Date().toString()}.
-            Ubicacion: Latitude is ${location?.latitude ?? 'unknown'}, Longitude is ${location?.longitude ?? 'unknown'}.`
+            Hola ${name}, has iniciado sesion correctamente. ${new Date().toString()}.
+            `
         }
         await transporter.sendMail(mailOptions)
     } catch (error) {

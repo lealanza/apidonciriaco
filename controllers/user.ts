@@ -93,10 +93,13 @@ export const login = async (req: Request, res: Response) => {
             return
         }
         const token = await generateToken(user.id);
-        sendEmailLogin(email, user.userName)
+        sendEmailLogin(email, user.userName);
         res.json({
             message: "Login Correcto",
+            user,
+            token
         })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
