@@ -59,6 +59,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             })
         }
         const user = await User.findOneAndDelete({ userDelete });
+        sendEmailDeleteAcount(user.email)
         res.json({
             message: "Usuario Eliminado"
         })

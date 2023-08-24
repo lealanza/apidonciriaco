@@ -60,6 +60,21 @@ export const sendEmailLogin = async (to:string, name:string) => {
     }
 }
 
+export const sendEmailDeleteAcount = async (to:string)=>{
+    try {
+        const mailOptions = {
+            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+            to,
+            subject:"Eliminacion de cuenta",
+            text:`
+            Hola,tu cuenta fue eliminada correctamente.
+            `
+        }
+        await transporter.sendMail(mailOptions)
+    } catch (error) {
+        console.error("Error al enviar el correo de inicio de sesion ",error)
+    }
+}
 
 
 export const sendEmailConfirmed = async (to:string, order:IOrder) => {
