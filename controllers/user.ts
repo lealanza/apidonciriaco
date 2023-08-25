@@ -2,9 +2,8 @@ import { Response, Request } from "express";
 import User, { IUser } from "../models/users";
 import bcsrypt from "bcryptjs";
 import randomstring from "randomstring";
-import { sendEmail} from "../mailers/mailers";
+import { sendEmail, sendEmailAccountVerified, sendEamilLogin} from "../mailers/mailers";
 import { generateToken } from "../helpers/generateToken";
-import { RSC } from "next/dist/client/components/app-router-headers";
 
 
 
@@ -89,6 +88,7 @@ export const login = async (req: Request, res: Response) => {
             return
         }
         const token = await generateToken(user.id);
+        sendEamilLogin(email, user.name),
         res.json({
             message: "Login Correcto",
             user,
@@ -127,6 +127,7 @@ export const verifiedUser = async (req: Request, res: Response) => {
             })
         }
         const userAuth = await User.findOneAndUpdate({ email}, { verified: true });
+        sendEmailAccountVerified(email, user.name)
         res.status(200).json({
             msg:"Usuario verificado con existo"
         })

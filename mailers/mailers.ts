@@ -1,17 +1,17 @@
 import nodemailer from 'nodemailer';
 import { IOrder } from '../models/orders';
-import Product, {IProduct} from '../models/products';
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth:{
-        user: 'lanza.le4ndr0@gmail.com',
-        pass: 'khwgmfrieibnhuim'
-    },
-    from:'lanza.le4ndr0@gmail.com'
-})
+
 
 export const sendEmail = async (to:string, name:string, code:string) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'lanza.le4ndr0@gmail.com',
+          pass: 'khwgmfrieibnhuim',
+        },
+      });
+    
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
@@ -27,27 +27,41 @@ export const sendEmail = async (to:string, name:string, code:string) => {
         console.error("Error al enviar el correo",error)
     }
 }
-
-
-
-export const sendEmailDeleteAcount = async (to:string)=>{
+export const sendEamilLogin = async (to:string, name:string) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'lanza.le4ndr0@gmail.com',
+          pass: 'khwgmfrieibnhuim',
+        },
+      });
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
             to,
-            subject:"Eliminacion de cuenta",
+            subject:"Nuevo inicio de sesion",
             text:`
-            Hola,tu cuenta fue eliminada correctamente.
+            Hola ${name}, has iniciado sesion correctamente.
+            Hora ${new Date().toString()}
             `
         }
         await transporter.sendMail(mailOptions)
-    } catch (error) {
-        console.error("Error al enviar el correo de inicio de sesion ",error)
     }
+    catch{
+        console.error("Error al enviar el correo")
+    
+    }
+    
 }
 
-
 export const sendEmailConfirmed = async (to:string, order:IOrder) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'lanza.le4ndr0@gmail.com',
+          pass: 'khwgmfrieibnhuim',
+        },
+      });
     try {
         
         const mailOptions = {
@@ -65,4 +79,28 @@ export const sendEmailConfirmed = async (to:string, order:IOrder) => {
     } catch (error) {
         console.error("Error al enviar el correo de confirmacion ",error)
     }
+}
+
+export const sendEmailAccountVerified = async (to:string, name:string) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'lanza.le4ndr0@gmail.com',
+          pass: 'khwgmfrieibnhuim',
+        },
+      });
+      try {
+        const mailOptions = {
+            from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',
+            to,
+            subject:"Cuenta verificada",
+            text:`
+            Hola ${name}, tu cuenta fue verificada.
+            `
+        }
+        await transporter.sendMail(mailOptions)
+      }
+      catch (error) {
+        console.error("Error al enviar el correo ",error)
+      }
 }

@@ -84,24 +84,7 @@ export const deleteOrder = async (req: Request, res: Response) => {
       res.status(500).send("Error del servidor");
     }
 }
-export const deleteAllOrders = async (req: Request, res: Response) => {
-    try {
-        const deletedOrders = await Order.deleteMany({});
-        if (!deletedOrders) {
-            return res.status(404).json({
-                message: 'Ordenes no encontradas'
-            });
-        }
-        res.json({
-            message: 'Ordenes eliminadas correctamente',
-        })
 
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).send("Error del servidor");
-    }
-}
 export const getOrderById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const order = await Order.findById(id);

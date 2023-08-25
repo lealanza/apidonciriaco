@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { createOrder, deleteAllOrders, deleteOrder, getOrders, getOrderById } from "../controllers/orders";
+import { createOrder, deleteOrder, getOrders, getOrderById } from "../controllers/orders";
 import { errorHandler } from "../middlewares/errores";
 
 const orderRoutes = Router();
@@ -17,7 +17,6 @@ orderRoutes.post("/create",[
     check('products', 'Los productos son obligatorios').not().isEmpty(),
 ],errorHandler, createOrder)
 orderRoutes.delete("/delete/:id",errorHandler, deleteOrder)
-orderRoutes.delete("/deleteall",errorHandler, deleteAllOrders)
 orderRoutes.post("/status/:id",[
     check('status', 'El estado es obligatorio').not().isEmpty(),
 ],errorHandler, getOrderById)

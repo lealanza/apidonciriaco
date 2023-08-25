@@ -17,7 +17,6 @@ orderRoutes.post("/create", [
     (0, express_validator_1.check)('products', 'Los productos son obligatorios').not().isEmpty(),
 ], errores_1.errorHandler, orders_1.createOrder);
 orderRoutes.delete("/delete/:id", errores_1.errorHandler, orders_1.deleteOrder);
-orderRoutes.delete("/deleteall", errores_1.errorHandler, orders_1.deleteAllOrders);
 orderRoutes.post("/status/:id", [
     (0, express_validator_1.check)('status', 'El estado es obligatorio').not().isEmpty(),
 ], errores_1.errorHandler, orders_1.getOrderById);

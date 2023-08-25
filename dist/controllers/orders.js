@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrderById = exports.deleteAllOrders = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
+exports.getOrderById = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
 const orders_1 = __importDefault(require("../models/orders"));
 const users_1 = __importDefault(require("../models/users"));
 const mailers_1 = require("../mailers/mailers");
@@ -96,24 +96,6 @@ const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteOrder = deleteOrder;
-const deleteAllOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const deletedOrders = yield orders_1.default.deleteMany({});
-        if (!deletedOrders) {
-            return res.status(404).json({
-                message: 'Ordenes no encontradas'
-            });
-        }
-        res.json({
-            message: 'Ordenes eliminadas correctamente',
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).send("Error del servidor");
-    }
-});
-exports.deleteAllOrders = deleteAllOrders;
 const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const order = yield orders_1.default.findById(id);

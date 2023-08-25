@@ -95,12 +95,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         const token = yield (0, generateToken_1.generateToken)(user.id);
-        (0, mailers_1.sendEmailLogin)(email, user.userName);
-        res.json({
-            message: "Login Correcto",
-            user,
-            token
-        });
+        (0, mailers_1.sendEamilLogin)(email, user.name),
+            res.json({
+                message: "Login Correcto",
+                user,
+                token
+            });
     }
     catch (error) {
         console.log(error);
@@ -132,6 +132,7 @@ const verifiedUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             });
         }
         const userAuth = yield users_1.default.findOneAndUpdate({ email }, { verified: true });
+        (0, mailers_1.sendEmailAccountVerified)(email, user.name);
         res.status(200).json({
             msg: "Usuario verificado con existo"
         });
@@ -150,7 +151,6 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const newPassword = bcryptjs_1.default.hashSync(password, salt);
     try {
         const user = yield users_1.default.findOneAndUpdate({ email }, { password: newPassword });
-        (0, mailers_1.sendEmailResetPassword)(email, password);
         res.status(200).json({
             message: "Contraseña cambiada con exito"
         });
