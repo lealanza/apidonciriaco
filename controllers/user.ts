@@ -49,10 +49,10 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-    
-    try {
-        const { _id } = req.params;
+    const { _id } = req.params;
         const user = User.findById({_id})
+    try {
+        
         await User.findOneAndDelete({ user });
         res.json({
             message: "Usuario Eliminado"

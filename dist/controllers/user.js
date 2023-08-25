@@ -57,9 +57,9 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.params;
+    const user = users_1.default.findById({ _id });
     try {
-        const { _id } = req.params;
-        const user = users_1.default.findById({ _id });
         yield users_1.default.findOneAndDelete({ user });
         res.json({
             message: "Usuario Eliminado"
