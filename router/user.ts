@@ -32,7 +32,7 @@ userRoutes.post('/login',[
     errorHandler, 
     login)
 userRoutes.get('/get',errorHandler, getUser)
-userRoutes.delete('/delete/:id',errorHandler, deleteUser)
+userRoutes.delete('/delete/',errorHandler, deleteUser)
 userRoutes.patch('/reset',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({min:6}),

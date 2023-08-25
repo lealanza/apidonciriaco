@@ -24,7 +24,7 @@ userRoutes.post('/login', [
     (0, express_validator_1.check)('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({ min: 6 })
 ], errores_1.errorHandler, user_1.login);
 userRoutes.get('/get', errores_1.errorHandler, user_1.getUser);
-userRoutes.delete('/delete/:id', errores_1.errorHandler, user_1.deleteUser);
+userRoutes.delete('/delete/', errores_1.errorHandler, user_1.deleteUser);
 userRoutes.patch('/reset', [
     (0, express_validator_1.check)('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     (0, express_validator_1.check)('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({ min: 6 }),
