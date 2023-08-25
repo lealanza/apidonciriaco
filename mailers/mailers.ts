@@ -1,12 +1,15 @@
+import { configDotenv } from 'dotenv';
 import nodemailer from 'nodemailer';
 import { IOrder } from '../models/orders';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const sendEmail = async (to:string, name:string, code:string) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'lanza.le4ndr0@gmail.com',
-          pass: 'khwgmfrieibnhuim',
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       });
     try {
@@ -25,13 +28,13 @@ export const sendEmail = async (to:string, name:string, code:string) => {
     }
 }
 export const sendEamilLogin = async (to:string, name:string) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'lanza.le4ndr0@gmail.com',
-          pass: 'khwgmfrieibnhuim',
-        },
-      });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
@@ -52,13 +55,13 @@ export const sendEamilLogin = async (to:string, name:string) => {
 }
 
 export const sendEmailConfirmed = async (to:string, order:IOrder) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'lanza.le4ndr0@gmail.com',
-          pass: 'khwgmfrieibnhuim',
-        },
-      });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
     try {
         
         const mailOptions = {
@@ -79,13 +82,13 @@ export const sendEmailConfirmed = async (to:string, order:IOrder) => {
 }
 
 export const sendEmailAccountVerified = async (to:string, name:string) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'lanza.le4ndr0@gmail.com',
-          pass: 'khwgmfrieibnhuim',
-        },
-      });
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
       try {
         const mailOptions = {
             from: '"Leandro Lanza" XXXXXXXXXXXXXXXXXXXXXXX',

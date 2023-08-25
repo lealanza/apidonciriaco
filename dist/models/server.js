@@ -39,7 +39,20 @@ class Server {
     }
     middlewares() {
         this.app.use(express_1.default.json());
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: (origin, callback) => {
+                const ACCEPTED_ORIGINS = [
+                    "http://localhost:8080",
+                    "http://localhost:3000",
+                    "https://apieco.vercel.app/"
+                ];
+                if (!origin)
+                    return callback(null, true);
+                if (ACCEPTED_ORIGINS.includes(origin)) {
+                    return callback(null, true);
+                }
+            }
+        }));
     }
     router() {
         this.app.use(this.createUser, user_1.default);
