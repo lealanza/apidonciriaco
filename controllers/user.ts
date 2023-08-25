@@ -4,7 +4,8 @@ import bcsrypt from "bcryptjs";
 import randomstring from "randomstring";
 import { sendEmail, sendEmailAccountVerified, sendEamilLogin} from "../mailers/mailers";
 import { generateToken } from "../helpers/generateToken";
-
+import dotenv from 'dotenv';
+dotenv.config()
 
 
 
@@ -26,8 +27,8 @@ export const createUser = async (req: Request, res: Response) => {
     const salt = bcsrypt.genSaltSync();
     userData.password = bcsrypt.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
-    if (adminKey === "admin") {
-        userData.role = true;
+    if (adminKey === process.env.SECRET_KEY) {
+    userData.role = true;
     }
     const newCode = randomstring.generate(6);
     userData.code = newCode;
@@ -49,11 +50,11 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const { _id } = req.params;
+   
+    try { 
+        const { _id } = req.query;
         const user = User.findById({_id})
-    try {
-        
-        await User.findOneAndDelete({ user });
+        await User.findByIdAndRemove({ _id });
         res.json({
             message: "Usuario Eliminado"
         })
