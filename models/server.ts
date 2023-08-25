@@ -22,7 +22,6 @@ export class Server{
         this.product="/product"
         this.category="/category"
         this.router();
-        
     }
 
     async start ():Promise<void>{
@@ -33,7 +32,7 @@ export class Server{
         this.app.use(express.json());
         this.app.use(cors(
             {
-                origin:'*'
+                origin: origin
             }
         ))
     }
