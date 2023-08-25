@@ -53,7 +53,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const { _id } = req.params;
         const user = User.findById({_id})
-        await User.findByIdAndRemove({ _id });
+        await User.findOneAndDelete({ user });
         res.json({
             message: "Usuario Eliminado"
         })
