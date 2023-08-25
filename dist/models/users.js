@@ -12,6 +12,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const roles_1 = require("../helpers/roles");
 const userSchema = new mongoose_1.Schema({
     userName: { type: String, required: [true, 'El nombre de usuario es requerido'] },
     email: { type: String, required: [true, 'El correo es requerido'], unique: true },
@@ -19,7 +20,7 @@ const userSchema = new mongoose_1.Schema({
     name: { type: String, required: [true, 'El nombre es requerido'] },
     lastName: { type: String, required: [true, 'El apellido es requerido'] },
     code: { type: String },
-    role: { type: Boolean, default: false },
+    role: { type: String, default: roles_1.ROLES.user },
     verified: { type: Boolean, default: false }
 }, { timestamps: true });
 userSchema.methods.toJSON = function () {

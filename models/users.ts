@@ -1,4 +1,5 @@
 import {Model, model, Schema} from 'mongoose';
+import { ROLES } from '../helpers/roles';
 
 export interface IUser {
     userName: string;
@@ -7,7 +8,7 @@ export interface IUser {
     name:string;
     lastName:string;
     code:string;
-    role: boolean;
+    role?: string;
     verified: boolean;
 }
 
@@ -18,7 +19,7 @@ const userSchema = new Schema<IUser>({
     name: {type: String, required: [true, 'El nombre es requerido']},
     lastName: {type: String, required: [true, 'El apellido es requerido']},
     code:{type: String},
-    role: {type: Boolean, default: false},
+    role: {type: String, default: ROLES.user},
     verified: {type: Boolean, default: false}
 },{timestamps: true});
 

@@ -5,6 +5,7 @@ import randomstring from "randomstring";
 import { sendEmail, sendEmailAccountVerified, sendEamilLogin} from "../mailers/mailers";
 import { generateToken } from "../helpers/generateToken";
 import dotenv from 'dotenv';
+import { ROLES } from "../helpers/roles";
 dotenv.config()
 
 
@@ -28,7 +29,7 @@ export const createUser = async (req: Request, res: Response) => {
     userData.password = bcsrypt.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
     if (adminKey === process.env.SECRET_KEY) {
-    userData.role = true;
+        userData.role = ROLES.admin;
     }
     const newCode = randomstring.generate(6);
     userData.code = newCode;
@@ -50,10 +51,10 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
-   
+    const { _id } = req.body;
+    const user = User.findById({_id})
     try { 
-        const { _id } = req.query;
-        const user = User.findById({_id})
+        
         await User.findByIdAndRemove({ _id });
         res.json({
             message: "Usuario Eliminado"

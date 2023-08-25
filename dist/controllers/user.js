@@ -19,6 +19,7 @@ const randomstring_1 = __importDefault(require("randomstring"));
 const mailers_1 = require("../mailers/mailers");
 const generateToken_1 = require("../helpers/generateToken");
 const dotenv_1 = __importDefault(require("dotenv"));
+const roles_1 = require("../helpers/roles");
 dotenv_1.default.config();
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = new users_1.default(req.body);
@@ -38,7 +39,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     userData.password = bcryptjs_1.default.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
     if (adminKey === process.env.SECRET_KEY) {
-        userData.role = true;
+        userData.role = roles_1.ROLES.admin;
     }
     const newCode = randomstring_1.default.generate(6);
     userData.code = newCode;
@@ -59,9 +60,9 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.body;
+    const user = users_1.default.findById({ _id });
     try {
-        const { _id } = req.query;
-        const user = users_1.default.findById({ _id });
         yield users_1.default.findByIdAndRemove({ _id });
         res.json({
             message: "Usuario Eliminado"
