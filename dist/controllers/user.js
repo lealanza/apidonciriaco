@@ -60,7 +60,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { _id } = req.params;
         const user = users_1.default.findById({ _id });
-        yield users_1.default.findOneAndDelete({ _id });
+        yield users_1.default.findByIdAndRemove({ _id });
         res.json({
             message: "Usuario Eliminado"
         });
