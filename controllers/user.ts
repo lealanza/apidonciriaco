@@ -2,7 +2,9 @@ import { Response, Request } from "express";
 import User, { IUser } from "../models/users";
 import bcsrypt from "bcryptjs";
 import randomstring from "randomstring";
-import { sendEmail, sendEmailLogin, sendEmailResetPassword, sendEmailDeleteAcount } from "../mailers/mailers";
+import { sendEmail} from "../mailers/mailers";
+import {sendEmailLogin} from "../mailers/sessionMailer";
+import {sendEmailResetPassword} from "../mailers/resetPassword";
 import { generateToken } from "../helpers/generateToken";
 import { RSC } from "next/dist/client/components/app-router-headers";
 
@@ -89,7 +91,7 @@ export const login = async (req: Request, res: Response) => {
             return
         }
         const token = await generateToken(user.id);
-        sendEmailLogin(email, user.userName);
+        sendEmailLogin(email, user.name);
         res.json({
             message: "Login Correcto",
             user,
