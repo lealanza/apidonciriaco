@@ -31,7 +31,11 @@ export class Server{
 
     middlewares ():void{
         this.app.use(express.json());
-        this.app.use(cors())
+        this.app.use(cors(
+            {
+                origin:'*'
+            }
+        ))
     }
     router ():void{
         this.app.use(this.createUser, routerUser);

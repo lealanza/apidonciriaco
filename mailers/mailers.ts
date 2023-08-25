@@ -1,8 +1,6 @@
 import nodemailer from 'nodemailer';
 import { IOrder } from '../models/orders';
 
-
-
 export const sendEmail = async (to:string, name:string, code:string) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -11,7 +9,6 @@ export const sendEmail = async (to:string, name:string, code:string) => {
           pass: 'khwgmfrieibnhuim',
         },
       });
-    
     try {
         const mailOptions = {
             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
@@ -45,7 +42,7 @@ export const sendEamilLogin = async (to:string, name:string) => {
             Hora ${new Date().toString()}
             `
         }
-        await transporter.sendMail(mailOptions)
+      await transporter.sendMail(mailOptions)
     }
     catch{
         console.error("Error al enviar el correo")
