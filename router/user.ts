@@ -13,7 +13,7 @@ const userRoutes = Router();
 userRoutes.post("/create",
     [check('userName', 'El nombre de usuario es obligatorio').not().isEmpty(),
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
-    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({min:6}),
+    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty(),
     check('name', 'El nombre es obligatorio').not().isEmpty(),
     check('lastName', 'El apellido es obligatorio').not().isEmpty(),
     check('email').custom(existingEmail),
@@ -28,14 +28,14 @@ userRoutes.patch('/verified',[
 
 userRoutes.post('/login',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
-    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({min:6}) ],
+    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty() ],
     errorHandler, 
     login)
 userRoutes.get('/get',errorHandler, getUser)
 userRoutes.delete('/delete/',errorHandler, deleteUser)
 userRoutes.patch('/reset',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
-    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty().isLength({min:6}),
+    check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty(),
 ],errorHandler, resetPassword)
 
 
