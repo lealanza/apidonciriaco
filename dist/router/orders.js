@@ -20,4 +20,5 @@ orderRoutes.delete("/delete/:id", errores_1.errorHandler, orders_1.deleteOrder);
 orderRoutes.post("/status/:id", [
     (0, express_validator_1.check)('status', 'El estado es obligatorio').not().isEmpty(),
 ], errores_1.errorHandler, orders_1.getOrderById);
+orderRoutes.get("/user/:_id", errores_1.errorHandler, orders_1.getOrdersByUser);
 exports.default = orderRoutes;

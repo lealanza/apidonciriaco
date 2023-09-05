@@ -22,7 +22,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     });
     return;
   }
-  const productsDetails = await Product.find({ title: { $in: products.map((p) => p.title) } });
+  const productsDetails = await Product.find({ title: { $in: products.map((p) => p.product) } });
   if (!productsDetails || productsDetails.length !== products.length|| (productsDetails.some((p) => (p.stock as number) <= 0))) {
     res.status(404).json({
       alert: "Uno o más productos no encontrados",
@@ -33,7 +33,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     const userId = userVerified._id;
     const userName = userVerified.name;
     const orderProducts = products.map((product) => {
-      const foundProduct = productsDetails.find((p) => p.title === product.title);
+      const foundProduct = productsDetails.find((p) => p.title === product.product);
       const totalPrice = foundProduct?.price as any * product.quantity;
       return {
         product: foundProduct ? foundProduct._id : undefined,
@@ -146,3 +146,26 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 }
 
+export const getOrdersByUser = async (req: Request, res: Response) => {
+  try {
+    const { _id } = req.params;
+    const userData =  await User.findById(_id);
+    console.log(userData)
+    if(!userData){
+      return res.status(404).json({
+        message: 'Usuario no encontrado',
+      });
+    }
+    const orders= await Order.find({ user: userData._id });
+    console.log(orders)
+    if (orders.length <= 0) {
+      return res.status(404).json({
+        message: 'No se encontraron órdenes para este usuario.',
+      });
+    }
+    res.json({ orders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+}

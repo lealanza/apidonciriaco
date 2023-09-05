@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrderById = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
+exports.getOrdersByUser = exports.getOrderById = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
 const orders_1 = __importDefault(require("../models/orders"));
 const users_1 = __importDefault(require("../models/users"));
 const mailers_1 = require("../mailers/mailers");
@@ -31,7 +31,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
         return;
     }
-    const productsDetails = yield products_1.default.find({ title: { $in: products.map((p) => p.title) } });
+    const productsDetails = yield products_1.default.find({ title: { $in: products.map((p) => p.product) } });
     if (!productsDetails || productsDetails.length !== products.length || (productsDetails.some((p) => p.stock <= 0))) {
         res.status(404).json({
             alert: "Uno o más productos no encontrados",
@@ -42,7 +42,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const userId = userVerified._id;
         const userName = userVerified.name;
         const orderProducts = products.map((product) => {
-            const foundProduct = productsDetails.find((p) => p.title === product.title);
+            const foundProduct = productsDetails.find((p) => p.title === product.product);
             const totalPrice = (foundProduct === null || foundProduct === void 0 ? void 0 : foundProduct.price) * product.quantity;
             return {
                 product: foundProduct ? foundProduct._id : undefined,
@@ -157,3 +157,28 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getOrderById = getOrderById;
+const getOrdersByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { _id } = req.params;
+        const userData = yield users_1.default.findById(_id);
+        console.log(userData);
+        if (!userData) {
+            return res.status(404).json({
+                message: 'Usuario no encontrado',
+            });
+        }
+        const orders = yield orders_1.default.find({ user: userData._id });
+        console.log(orders);
+        if (orders.length <= 0) {
+            return res.status(404).json({
+                message: 'No se encontraron órdenes para este usuario.',
+            });
+        }
+        res.json({ orders });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Error del servidor");
+    }
+});
+exports.getOrdersByUser = getOrdersByUser;

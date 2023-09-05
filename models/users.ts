@@ -1,4 +1,4 @@
-import {Model, model, Schema} from 'mongoose';
+import {Model, model, Schema} from 'mongoose'; 
 import { ROLES } from '../helpers/roles';
 
 export interface IUser {
@@ -9,7 +9,7 @@ export interface IUser {
     lastName:string;
     code:string;
     role?: string;
-    verified: boolean;
+    verified: boolean; 
 }
 
 const userSchema = new Schema<IUser>({
