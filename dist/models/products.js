@@ -18,7 +18,7 @@ const productSchema = new mongoose_1.Schema({
     ganancia: { type: Number, required: true },
     finalPrice: { type: String },
     stock: { type: Number, required: true },
-    images: { type: String, required: true },
+    images: [{ type: String, required: true }],
     description: { type: String, required: true },
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Category', required: true },
     date: { type: Date, default: Date.now }

@@ -16,7 +16,7 @@ exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = 
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, price, ganancia, finalPrice, images, stock, description, category } = req.body;
+    const { title, price, ganancia, finalPrice, stock, images, description, category } = req.body;
     const categoryDetails = yield categories_1.Category.findOne({ name: category });
     try {
         const product = new products_1.default({
@@ -27,7 +27,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             stock,
             description,
             images,
-            category: categoryDetails
+            category: categoryDetails,
         });
         yield product.save();
         res.status(201).json({ product });

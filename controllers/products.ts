@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { Category, ICategory } from "../models/categories";
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
-    const { title, price, ganancia, finalPrice, stock, description, category } = req.body;
+    const { title, price, ganancia, finalPrice, stock,images, description, category } = req.body;
     const categoryDetails:ICategory | null = await Category.findOne({ name: category });
     try { 
         const product = new Product({
@@ -13,7 +13,8 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
             finalPrice,
             stock,
             description,
-            category:categoryDetails
+            images,
+            category:categoryDetails,
         });
         await product.save();
         res.status(201).json({ product });

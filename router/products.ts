@@ -12,7 +12,6 @@ productRoutes.post("/create",[
     check('ganancia','La ganancia es obligatoria').not().isEmpty(),
     check('category', 'La categoria es obligatoria').not().isEmpty(),
     check('stock', 'El stock es obligatorio').not().isEmpty(),
-
 ],errorHandler, createProduct);
 productRoutes.get("/get", getProducts)
 productRoutes.delete("/delete/:id", deleteProduct)
