@@ -32,7 +32,7 @@ export class Server{
         this.app.use(express.json());
         this.app.use(cors(
             {
-                origin:'*'
+                origin:'http://localhost:3000'
             }
         ))
     }
