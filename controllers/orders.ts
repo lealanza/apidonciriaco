@@ -15,20 +15,12 @@ export const getOrders = async (req: Request, res: Response) => {
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
   const {cellphone,direction,city,postalCode,state,products,status,total,
   }: IOrder = req.body;
-  const productsDetails = await Product.find({ title: { $in: products.map((p) => p.product) } });
+ 
   try {
     const userId:ObjectId = req.body.userVerified._id;
-    const orderProducts = products.map((product) => {
-      const foundProduct = productsDetails.find((p) => p.title === product.product);
-      const totalPrice = foundProduct?.price as any * product.quantity;
-      return {
-        product: foundProduct ? foundProduct._id : undefined,
-        quantity: product.quantity,
-        totalPrice,
-      };
-    });
+   
     const orderNumer= await Order.countDocuments();
-    const orderTotal = orderProducts.reduce((acc, curr) => acc + curr.totalPrice, 0);
+    
     const order = new Order({
       orderNumber:orderNumer+1,
       user: userId,
@@ -37,8 +29,8 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       city,
       postalCode,
       state,
-      total:orderTotal,
-      products: orderProducts,
+      total,
+      products,
       status: "pending",
       createdAt: new Date(),
     });
