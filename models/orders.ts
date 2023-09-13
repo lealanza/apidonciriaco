@@ -37,7 +37,7 @@ const orderSchema = new Schema<IOrder>({
       quantity: { type: Number, required: true },
     }],
   total: { type: Number},
-  status: { type: String, required: true },
+  status: { type: String,},
     
 },
 {

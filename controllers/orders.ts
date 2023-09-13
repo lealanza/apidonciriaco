@@ -13,7 +13,7 @@ export const getOrders = async (req: Request, res: Response) => {
    res.json(orders);
 }
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const {cellphone,direction,city,postalCode,state,products,status,total,
+  const {cellphone,direction,city,postalCode,state,products,total,
   }: IOrder = req.body;
  
   try {
