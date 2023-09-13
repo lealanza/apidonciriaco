@@ -1,9 +1,5 @@
 import mongoose, {Model, model, Schema} from 'mongoose'
-import {ICategory} from './categories'
 
-interface Category extends ICategory{
-    name:string;
-}
 export interface IProduct{
     _id:string;
     title:String;
@@ -14,7 +10,7 @@ export interface IProduct{
     images:string[];
     description:String;
     date:Date;
-    category:Category;
+    category:String;
 }
 const productSchema = new Schema<IProduct>({
     title:{type:String, required:true},
@@ -24,7 +20,7 @@ const productSchema = new Schema<IProduct>({
     stock:{type:Number, required:true},
     images:[{type:String, required:true}],
     description:{type:String, required:true},
-    category:{type:Schema.Types.ObjectId, ref:'Category', required:true},
+    category:{type:String, required:true},
     date:{type:Date, default:Date.now}
 })
 
