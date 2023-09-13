@@ -4,7 +4,6 @@ import { Category, ICategory } from "../models/categories";
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
     const { title, price, ganancia, stock,images, description, category } = req.body;
-    const categoryDetails:ICategory | null = await Category.findOne({ name: category });
     try { 
         const product = new Product({
             title,
@@ -14,7 +13,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
             stock,
             description,
             images,
-            category:categoryDetails,
+            category,
         });
         await product.save();
         res.status(201).json({ product });
