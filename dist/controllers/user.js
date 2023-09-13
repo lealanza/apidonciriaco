@@ -38,8 +38,8 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const salt = bcryptjs_1.default.genSaltSync();
     userData.password = bcryptjs_1.default.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
-    if (adminKey === process.env.SECRET_KEY) {
-        userData.role = roles_1.ROLES.admin;
+    if (adminKey === process.env.KEYFORADMIN) {
+        userData.rol = roles_1.ROLES.admin;
     }
     const newCode = randomstring_1.default.generate(6);
     userData.code = newCode;

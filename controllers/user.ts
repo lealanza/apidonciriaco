@@ -28,8 +28,9 @@ export const createUser = async (req: Request, res: Response) => {
     const salt = bcsrypt.genSaltSync();
     userData.password = bcsrypt.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
-    if (adminKey === process.env.SECRET_KEY) {
-        userData.role = ROLES.admin;
+
+    if (adminKey === process.env.KEYFORADMIN) {
+        userData.rol = ROLES.admin;
     }
     const newCode = randomstring.generate(6);
     userData.code = newCode;

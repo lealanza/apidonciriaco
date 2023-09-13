@@ -23,14 +23,7 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getOrders = getOrders;
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { cellphone, email, direction, city, postalCode, state, products, status, total, } = req.body;
-    const userVerified = yield users_1.default.findOne({ email });
-    if (!userVerified) {
-        res.status(404).json({
-            alert: "Usuario no registrado",
-        });
-        return;
-    }
+    const { cellphone, direction, city, postalCode, state, products, status, total, } = req.body;
     const productsDetails = yield products_1.default.find({ title: { $in: products.map((p) => p.product) } });
     if (!productsDetails || productsDetails.length !== products.length || (productsDetails.some((p) => p.stock <= 0))) {
         res.status(404).json({
@@ -39,8 +32,7 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return;
     }
     try {
-        const userId = userVerified._id;
-        const userName = userVerified.name;
+        const userId = req.body.userVerified._id;
         const orderProducts = products.map((product) => {
             const foundProduct = productsDetails.find((p) => p.title === product.product);
             const totalPrice = (foundProduct === null || foundProduct === void 0 ? void 0 : foundProduct.price) * product.quantity;

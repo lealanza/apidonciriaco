@@ -17,7 +17,6 @@ const orderSchema = new mongoose_1.Schema({
     user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
     cellphone: { type: String, required: true },
     direction: { type: String, required: true },
-    email: { type: String },
     city: { type: String, required: true },
     state: { type: String, required: true },
     postalCode: { type: String, required: true },

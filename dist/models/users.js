@@ -20,7 +20,7 @@ const userSchema = new mongoose_1.Schema({
     name: { type: String, required: [true, 'El nombre es requerido'] },
     lastName: { type: String, required: [true, 'El apellido es requerido'] },
     code: { type: String },
-    role: { type: String, default: roles_1.ROLES.user },
+    rol: { type: String, default: roles_1.ROLES.user },
     verified: { type: Boolean, default: false }
 }, { timestamps: true });
 userSchema.methods.toJSON = function () {

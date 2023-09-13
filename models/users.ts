@@ -8,7 +8,7 @@ export interface IUser {
     name:string;
     lastName:string;
     code:string;
-    role?: string;
+    rol?: string,
     verified: boolean; 
 }
 
@@ -19,7 +19,7 @@ const userSchema = new Schema<IUser>({
     name: {type: String, required: [true, 'El nombre es requerido']},
     lastName: {type: String, required: [true, 'El apellido es requerido']},
     code:{type: String},
-    role: {type: String, default: ROLES.user},
+    rol: {type: String, default: ROLES.user},
     verified: {type: Boolean, default: false}
 },{timestamps: true});
 

@@ -13,15 +13,9 @@ export const getOrders = async (req: Request, res: Response) => {
    res.json(orders);
 }
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const {cellphone,email,direction,city,postalCode,state,products,status,total,
+  const {cellphone,direction,city,postalCode,state,products,status,total,
   }: IOrder = req.body;
-  // const userVerified = await User.findOne({ email });
-  // if (!userVerified) {
-  //   res.status(404).json({
-  //     alert: "Usuario no registrado",
-  //   });
-  //   return;
-  // }
+ 
   const productsDetails = await Product.find({ title: { $in: products.map((p) => p.product) } });
   if (!productsDetails || productsDetails.length !== products.length|| (productsDetails.some((p) => (p.stock as number) <= 0))) {
     res.status(404).json({
@@ -30,8 +24,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     return;
   }
   try {
-    const userId = userVerified._id;
-    const userName = userVerified.name;
+    const userId:ObjectId = req.body.userVerified._id;
     const orderProducts = products.map((product) => {
       const foundProduct = productsDetails.find((p) => p.title === product.product);
       const totalPrice = foundProduct?.price as any * product.quantity;
