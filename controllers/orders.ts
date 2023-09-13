@@ -15,14 +15,7 @@ export const getOrders = async (req: Request, res: Response) => {
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
   const {cellphone,direction,city,postalCode,state,products,status,total,
   }: IOrder = req.body;
- 
   const productsDetails = await Product.find({ title: { $in: products.map((p) => p.product) } });
-  if (!productsDetails || productsDetails.length !== products.length|| (productsDetails.some((p) => (p.stock as number) <= 0))) {
-    res.status(404).json({
-      alert: "Uno o más productos no encontrados",
-    });
-    return;
-  }
   try {
     const userId:ObjectId = req.body.userVerified._id;
     const orderProducts = products.map((product) => {
