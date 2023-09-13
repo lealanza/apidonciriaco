@@ -9,7 +9,6 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
             title,
             price,
             ganancia,
-            finalPrice:price+ganancia,
             stock,
             description,
             images,
