@@ -13,17 +13,16 @@ export const getOrders = async (req: Request, res: Response) => {
    res.json(orders);
 }
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const {cellphone,direction,city,postalCode,state,products,total,
+  const {cellphone,direction,city,postalCode,state,products,total,user,
   }: IOrder = req.body;
  
   try {
-    const userId:ObjectId = req.body.userVerified._id;
    
     const orderNumer= await Order.countDocuments();
     
     const order = new Order({
       orderNumber:orderNumer+1,
-      user: userId,
+      user,
       cellphone,
       direction,
       city,
