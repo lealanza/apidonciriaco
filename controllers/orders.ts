@@ -13,11 +13,11 @@ export const getOrders = async (req: Request, res: Response) => {
    res.json(orders);
 }
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const {cellphone,direction,city,postalCode,state,products,total,user,
+  const {cellphone,direction,city,postalCode,state,products,total
   }: IOrder = req.body;
  
   try {
-   
+    const user= req.params
     const orderNumer= await Order.countDocuments();
     
     const order = new Order({
