@@ -1,11 +1,12 @@
-import express, {Express} from 'express'
-import { conectDB } from '../lib/config'
-import routerUser from '../router/user'
-import routerOrder from '../router/orders'
-import routerProduct from '../router/products'
-import categoryRoutes from '../router/categories'
-//mport routerProovedor from '../router/proovedor'
-import cors from 'cors'
+import express, { Express } from 'express';
+import { conectDB } from '../lib/config';
+import routerUser from '../router/user';
+import routerOrder from '../router/orders';
+import routerProduct from '../router/products';
+import categoryRoutes from '../router/categories';
+import cors from 'cors';
+import path from 'path'; 
+import fileUpload from 'express-fileupload';
 
 export class Server{
     app: Express;
@@ -27,6 +28,7 @@ export class Server{
     async start ():Promise<void>{
         await conectDB();
     }
+    
 
     middlewares ():void{
         this.app.use(express.json());
@@ -34,13 +36,15 @@ export class Server{
             
                 {origin: 'http://localhost:3000'}
             
-        ))
+        )); 
+        this.app.use('/uploads',express.static(path.resolve('uploads')));
     }
     router ():void{
         this.app.use(this.createUser, routerUser);
         this.app.use(this.order, routerOrder);
         this.app.use(this.product, routerProduct)
         this.app.use(this.category, categoryRoutes)
+        
     }
 
     listen ():void{

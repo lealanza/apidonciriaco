@@ -1,27 +1,32 @@
-import Product, { IProduct } from "../models/products";
+import Product from "../models/products";
 import { Request, Response, NextFunction } from "express";
 import { Category, ICategory } from "../models/categories";
 
-export const createProduct = async (req: Request, res: Response): Promise<void> => {
-    const { title, price, ganancia, stock,images, description, category } = req.body;
-    
-    try { 
-        const product = new Product({
-            title,
-            price,
-            ganancia,
-            stock,
-            description,
-            images,
-            category,
-        });
-        await product.save();
-        res.status(201).json({ product });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error del servidor");
-    }
-}
+
+export const createProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { title, price, ganancia, stock, description, category } = req.body;
+  const images = req.files;
+  try {
+    const product = new Product({
+      title,
+      price,
+      ganancia,
+      stock,
+      description,
+      category,
+      images:images,
+    });
+    await product.save();
+    res.status(201).json({ product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
         const products = await Product.find();
@@ -31,19 +36,24 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
         res.status(500).send("Error del servidor");
     }
 }
-export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const { id } = req.params;
-        const product = await Product.findByIdAndDelete(id);
-        if (!product) {
-            res.status(404).json({ msg: "Producto no encontrado" });
-        }
-        res.status(200).json({ msg: "Producto eliminado" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error del servidor");
+export const deleteProduct = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+       res.status(404).json({ msg: "Producto no encontrado" });
+       return
     }
-}
+    res.status(200).json({ msg: "Producto eliminado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error del servidor");
+  }
+};
+
 export const updateProduct = async (req: Request, res: Response): Promise<void> => {
   try{
         const { id } = req.params;

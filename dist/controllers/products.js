@@ -16,18 +16,17 @@ exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = 
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, price, ganancia, finalPrice, stock, images, description, category } = req.body;
-    const categoryDetails = yield categories_1.Category.findOne({ name: category });
+    const { title, price, ganancia, stock, description, category } = req.body;
+    const images = req.files;
     try {
         const product = new products_1.default({
             title,
             price,
             ganancia,
-            finalPrice,
             stock,
             description,
-            images,
-            category: categoryDetails,
+            category,
+            images: images,
         });
         yield product.save();
         res.status(201).json({ product });
@@ -55,6 +54,7 @@ const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const product = yield products_1.default.findByIdAndDelete(id);
         if (!product) {
             res.status(404).json({ msg: "Producto no encontrado" });
+            return;
         }
         res.status(200).json({ msg: "Producto eliminado" });
     }

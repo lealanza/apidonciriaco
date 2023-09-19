@@ -1,26 +1,31 @@
-import mongoose, {Model, model, Schema} from 'mongoose'
+import mongoose, {Model, model, Document, Schema} from 'mongoose'
+export interface IImage {
+  filename: string;
+  path: string;
+}
 
-export interface IProduct{
-    _id:string;
-    title:String;
-    price:Number;
-    ganancia:Number;
-    stock:Number;
-    images:string[];
-    description:String;
-    date:Date;
-    category:String;
+interface IProduct extends Document {
+  _id: string;
+  title: string;
+  price: number;
+  ganancia: number;
+  stock: number;
+  description: string;
+  category: string;
+  images: IImage[];
+  date: Date;
 }
 const productSchema = new Schema<IProduct>({
-    title:{type:String, required:true},
-    price:{type:Number, required:true},
-    ganancia:{type:Number, required:true},
-    stock:{type:Number, required:true},
-    images:[{type:String, required:true}],
-    description:{type:String, required:true},
-    category:{type:String, required:true},
-    date:{type:Date, default:Date.now}
-})
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  ganancia: { type: Number, required: true },
+  stock: { type: Number, required: true },
+  description: { type: String, required: true },
+  category: { type: String, required: true },
+  images: [{ filename: String, path: String }],
+  date: { type: Date, default: Date.now },
+});
+
 
 productSchema.methods.toJSON = function(){
     const {__v, date, ...product} = this.toObject();

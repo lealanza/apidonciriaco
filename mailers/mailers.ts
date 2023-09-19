@@ -54,32 +54,32 @@ export const sendEamilLogin = async (to:string, name:string) => {
     
 }
 
-export const sendEmailConfirmed = async (to:string, order:IOrder) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-    try {
+// export const sendEmailConfirmed = async (to:string, order:IOrder) => {
+//   const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: process.env.EMAIL_USER,
+//       pass: process.env.EMAIL_PASS,
+//     },
+//   });
+//     try {
         
-        const mailOptions = {
-            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
-            to,
-            subject:"Has confirmado tu pedido",
-            text:`
-            Hola has confirmado tu pedido.
-            Pedido numero: ${order.orderNumber}.
-            el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
-            fecha: ${order.updatedAt.toString()}.
-            `
-        }
-        await transporter.sendMail(mailOptions)
-    } catch (error) {
-        console.error("Error al enviar el correo de confirmacion ",error)
-    }
-}
+//         const mailOptions = {
+//             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+//             to,
+//             subject:"Has confirmado tu pedido",
+//             text:`
+//             Hola has confirmado tu pedido.
+//             Pedido numero: ${order.orderNumber}.
+//             el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
+//             fecha: ${order.updatedAt.toString()}.
+//             `
+//         }
+//         await transporter.sendMail(mailOptions)
+//     } catch (error) {
+//         console.error("Error al enviar el correo de confirmacion ",error)
+//     }
+// }
 
 export const sendEmailAccountVerified = async (to:string, name:string) => {
   const transporter = nodemailer.createTransport({

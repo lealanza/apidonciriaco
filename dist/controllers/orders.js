@@ -12,11 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrdersByUser = exports.getOrderById = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
+exports.getOrdersByUser = exports.orderStatusChange = exports.deleteOrder = exports.createOrder = exports.getOrders = void 0;
 const orders_1 = __importDefault(require("../models/orders"));
 const users_1 = __importDefault(require("../models/users"));
-const mailers_1 = require("../mailers/mailers");
-const products_1 = __importDefault(require("../models/products"));
 const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const orders = yield orders_1.default.find();
     res.json(orders);
@@ -24,36 +22,27 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOrders = getOrders;
 const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { cellphone, direction, city, postalCode, state, products, status, total, } = req.body;
-    const productsDetails = yield products_1.default.find({ title: { $in: products.map((p) => p.product) } });
-    if (!productsDetails || productsDetails.length !== products.length || (productsDetails.some((p) => p.stock <= 0))) {
+    const { _id } = req.params;
+    const userVerified = yield users_1.default.findById({ _id });
+    if (!userVerified) {
         res.status(404).json({
-            alert: "Uno o más productos no encontrados",
+            alert: "Usuario no registrado",
         });
         return;
     }
     try {
-        const userId = req.body.userVerified._id;
-        const orderProducts = products.map((product) => {
-            const foundProduct = productsDetails.find((p) => p.title === product.product);
-            const totalPrice = (foundProduct === null || foundProduct === void 0 ? void 0 : foundProduct.price) * product.quantity;
-            return {
-                product: foundProduct ? foundProduct._id : undefined,
-                quantity: product.quantity,
-                totalPrice,
-            };
-        });
-        const orderNumer = yield orders_1.default.countDocuments();
-        const orderTotal = orderProducts.reduce((acc, curr) => acc + curr.totalPrice, 0);
+        const userId = userVerified._id;
+        const orderNumber = yield orders_1.default.countDocuments();
         const order = new orders_1.default({
-            orderNumber: orderNumer + 1,
+            orderNumber: orderNumber + 1,
             user: userId,
             cellphone,
             direction,
             city,
             postalCode,
             state,
-            total: orderTotal,
-            products: orderProducts,
+            total,
+            products,
             status: "pending",
             createdAt: new Date(),
         });
@@ -71,8 +60,8 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.createOrder = createOrder;
 const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const id = req.params.id;
-        const deletedOrder = yield orders_1.default.findByIdAndDelete(id);
+        const { _id } = req.params;
+        const deletedOrder = yield orders_1.default.findByIdAndDelete(_id);
         if (!deletedOrder) {
             return res.status(404).json({
                 message: 'Orden no encontrada'
@@ -88,14 +77,14 @@ const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteOrder = deleteOrder;
-const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const order = yield orders_1.default.findById(id);
+const orderStatusChange = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.params;
+    const order = yield orders_1.default.findById(_id);
     const statusOrder = order === null || order === void 0 ? void 0 : order.status;
     if (statusOrder === 'pending') {
         const { status } = req.body;
         try {
-            let order = yield orders_1.default.findById(id);
+            let order = yield orders_1.default.findById(_id);
             if (!order) {
                 return res.status(404).json({
                     message: "Order not found",
@@ -103,7 +92,7 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             }
             let updatedOrder;
             if (status === 'canceled') {
-                const orderCanceled = yield orders_1.default.findByIdAndUpdate(id, { status: "canceled" }, { new: true });
+                const orderCanceled = yield orders_1.default.findByIdAndUpdate(_id, { status: "canceled" }, { new: true });
                 res.status(200).json({
                     alert: "La orden fue cancelada",
                     order: orderCanceled === null || orderCanceled === void 0 ? void 0 : orderCanceled.status
@@ -111,7 +100,7 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 return;
             }
             if (status === 'paid') {
-                updatedOrder = yield orders_1.default.findByIdAndUpdate(id, { status: "paid" }, { new: true, updatedAt: new Date() });
+                updatedOrder = yield orders_1.default.findByIdAndUpdate(_id, { status: "paid" }, { new: true, updatedAt: new Date() });
                 if (!updatedOrder) {
                     throw new Error('Order not found');
                 }
@@ -119,23 +108,11 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 const user = yield users_1.default.findById(orderDetails === null || orderDetails === void 0 ? void 0 : orderDetails.user);
                 const userEmail = user === null || user === void 0 ? void 0 : user.email;
                 const orderStatus = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.status;
-                (0, mailers_1.sendEmailConfirmed)(userEmail, updatedOrder);
-                const productIds = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.products.map((p) => p.product);
-                const quantities = updatedOrder === null || updatedOrder === void 0 ? void 0 : updatedOrder.products.map((p) => p.quantity);
-                if (productIds && quantities && productIds.length === quantities.length) {
-                    const updates = [];
-                    for (let i = 0; i < productIds.length; i++) {
-                        const productId = productIds[i];
-                        const quantity = quantities[i];
-                        updates.push(products_1.default.findByIdAndUpdate(productId, { $inc: { stock: -quantity } }).exec());
-                    }
-                    yield Promise.all(updates);
-                }
+                res.status(200).json({
+                    alert: "Order status updated",
+                    order: updatedOrder
+                });
             }
-            res.status(200).json({
-                alert: "Order status updated",
-                order: updatedOrder
-            });
         }
         catch (error) {
             console.error(error);
@@ -148,7 +125,7 @@ const getOrderById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
-exports.getOrderById = getOrderById;
+exports.orderStatusChange = orderStatusChange;
 const getOrdersByUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { _id } = req.params;
@@ -162,7 +139,7 @@ const getOrdersByUser = (req, res) => __awaiter(void 0, void 0, void 0, function
         const orders = yield orders_1.default.find({ user: userData._id });
         console.log(orders);
         if (orders.length <= 0) {
-            return res.status(404).json({
+            res.status(404).json({
                 message: 'No se encontraron órdenes para este usuario.',
             });
         }

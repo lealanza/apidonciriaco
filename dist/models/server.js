@@ -19,8 +19,8 @@ const user_1 = __importDefault(require("../router/user"));
 const orders_1 = __importDefault(require("../router/orders"));
 const products_1 = __importDefault(require("../router/products"));
 const categories_1 = __importDefault(require("../router/categories"));
-//mport routerProovedor from '../router/proovedor'
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -40,6 +40,7 @@ class Server {
     middlewares() {
         this.app.use(express_1.default.json());
         this.app.use((0, cors_1.default)({ origin: 'http://localhost:3000' }));
+        this.app.use('/uploads', express_1.default.static(path_1.default.resolve('uploads')));
     }
     router() {
         this.app.use(this.createUser, user_1.default);

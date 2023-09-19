@@ -23,14 +23,13 @@ export const createUser = async (req: Request, res: Response) => {
         return res.status(400).json({
             message: "El email ya existe"
         })
-
     }
     const salt = bcsrypt.genSaltSync();
     userData.password = bcsrypt.hashSync(password, salt);
     const adminKey = req.headers["admin-key"];
-
+    console.log(adminKey)
     if (adminKey === process.env.KEYFORADMIN) {
-        userData.rol = ROLES.admin;
+        userData.role = ROLES.admin;
     }
     const newCode = randomstring.generate(6);
     userData.code = newCode;

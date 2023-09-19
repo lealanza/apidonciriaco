@@ -4,27 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const express_validator_1 = require("express-validator");
 const products_1 = require("../controllers/products");
 const errores_1 = require("../middlewares/errores");
+const multer_1 = __importDefault(require("../lib/multer"));
 const productRoutes = (0, express_1.default)();
-productRoutes.post("/create", [
-    (0, express_validator_1.check)('title', 'El titulo es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('price', 'El precio es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('description', 'La descripcion es obligatoria').not().isEmpty(),
-    (0, express_validator_1.check)('ganancia', 'La ganancia es obligatoria').not().isEmpty(),
-    (0, express_validator_1.check)('category', 'La categoria es obligatoria').not().isEmpty(),
-    (0, express_validator_1.check)('stock', 'El stock es obligatorio').not().isEmpty(),
-], errores_1.errorHandler, products_1.createProduct);
+productRoutes.post("/create", multer_1.default.array('image', 5), errores_1.errorHandler, products_1.createProduct);
 productRoutes.get("/get", products_1.getProducts);
 productRoutes.delete("/delete/:id", products_1.deleteProduct);
-productRoutes.patch("/update/:id", [
-    (0, express_validator_1.check)('price', 'El precio es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('description', 'La descripcion es obligatoria').not().isEmpty(),
-    (0, express_validator_1.check)('ganancia', 'La ganancia es obligatoria').not().isEmpty(),
-    (0, express_validator_1.check)('stock', 'El stock es obligatorio').not().isEmpty(),
-], errores_1.errorHandler, products_1.updateProduct);
-productRoutes.get('/category', [
-    (0, express_validator_1.check)('name', 'El nombre de la categoria es obligatorio').not().isEmpty(),
-], errores_1.errorHandler, products_1.getProductsByCategory);
+productRoutes.patch("/update/:id", errores_1.errorHandler, products_1.updateProduct);
+productRoutes.get('/category', errores_1.errorHandler, products_1.getProductsByCategory);
 exports.default = productRoutes;

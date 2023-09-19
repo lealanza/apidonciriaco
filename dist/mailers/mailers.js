@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendEmailAccountVerified = exports.sendEmailConfirmed = exports.sendEamilLogin = exports.sendEmail = void 0;
+exports.sendEmailAccountVerified = exports.sendEamilLogin = exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -66,33 +66,31 @@ const sendEamilLogin = (to, name) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.sendEamilLogin = sendEamilLogin;
-const sendEmailConfirmed = (to, order) => __awaiter(void 0, void 0, void 0, function* () {
-    const transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-        },
-    });
-    try {
-        const mailOptions = {
-            from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
-            to,
-            subject: "Has confirmado tu pedido",
-            text: `
-            Hola has confirmado tu pedido.
-            Pedido numero: ${order.orderNumber}.
-            el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
-            fecha: ${order.updatedAt.toString()}.
-            `
-        };
-        yield transporter.sendMail(mailOptions);
-    }
-    catch (error) {
-        console.error("Error al enviar el correo de confirmacion ", error);
-    }
-});
-exports.sendEmailConfirmed = sendEmailConfirmed;
+// export const sendEmailConfirmed = async (to:string, order:IOrder) => {
+//   const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: process.env.EMAIL_USER,
+//       pass: process.env.EMAIL_PASS,
+//     },
+//   });
+//     try {
+//         const mailOptions = {
+//             from: '"Leandro Lanza" lanza.le4ndr0@gmail.com',
+//             to,
+//             subject:"Has confirmado tu pedido",
+//             text:`
+//             Hola has confirmado tu pedido.
+//             Pedido numero: ${order.orderNumber}.
+//             el pedido ya se encuentra ${(order.status === 'paid') ? 'confirmado' : ''}
+//             fecha: ${order.updatedAt.toString()}.
+//             `
+//         }
+//         await transporter.sendMail(mailOptions)
+//     } catch (error) {
+//         console.error("Error al enviar el correo de confirmacion ",error)
+//     }
+// }
 const sendEmailAccountVerified = (to, name) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: 'gmail',

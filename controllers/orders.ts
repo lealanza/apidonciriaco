@@ -2,27 +2,28 @@ import { Request, Response } from 'express';
 import Order, { IOrder } from '../models/orders';
 import { ObjectId } from 'mongodb';
 import User, { IUser } from '../models/users';
-import { sendEmailConfirmed } from '../mailers/mailers';
-import Product, { IProduct } from '../models/products';
-
-
-
 
 export const getOrders = async (req: Request, res: Response) => {
    const orders = await Order.find();
    res.json(orders);
 }
 export const createOrder = async (req: Request, res: Response): Promise<void> => {
-  const {cellphone,direction,city,postalCode,state,products,total
+  const {cellphone,direction,city,postalCode,state,products,status,total,
   }: IOrder = req.body;
- 
+  const {_id} = req.params;
+  const userVerified = await User.findById({ _id });
+  if (!userVerified) {
+    res.status(404).json({
+      alert: "Usuario no registrado",
+    });
+    return;
+  }
   try {
-    const user= req.params
-    const orderNumer= await Order.countDocuments();
-    
+    const userId = userVerified._id;
+   const orderNumber = await Order.countDocuments();
     const order = new Order({
-      orderNumber:orderNumer+1,
-      user,
+      orderNumber:orderNumber+1,
+      user: userId,
       cellphone,
       direction,
       city,
@@ -36,6 +37,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
     await order.save();
     res.status(201).json({
       message: "Orden creada correctamente",
+      
       data: order,
     });
     
@@ -46,8 +48,8 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 }
 export const deleteOrder = async (req: Request, res: Response) => {
     try {
-      const id: ObjectId | string = req.params.id;
-      const deletedOrder = await Order.findByIdAndDelete(id);
+      const {_id} = req.params;
+      const deletedOrder = await Order.findByIdAndDelete(_id);
       if (!deletedOrder) {
         return res.status(404).json({
           message: 'Orden no encontrada'
@@ -62,14 +64,14 @@ export const deleteOrder = async (req: Request, res: Response) => {
     }
 }
 
-export const getOrderById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const order = await Order.findById(id);
+export const orderStatusChange = async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  const order = await Order.findById(_id);
   const statusOrder = order?.status;
   if(statusOrder === 'pending'){
     const { status }= req.body;
     try {
-    let order = await Order.findById(id);
+    let order = await Order.findById(_id);
     if (!order) {
       return res.status(404).json({
         message: "Order not found",
@@ -78,7 +80,7 @@ export const getOrderById = async (req: Request, res: Response) => {
 
     let updatedOrder;
     if(status === 'canceled'){
-      const orderCanceled = await Order.findByIdAndUpdate(id, { status: "canceled" }, { new: true });
+      const orderCanceled = await Order.findByIdAndUpdate(_id, { status: "canceled" }, { new: true });
       res.status(200).json({
         alert:"La orden fue cancelada",
         order: orderCanceled?.status 
@@ -86,7 +88,7 @@ export const getOrderById = async (req: Request, res: Response) => {
       return;
     }
     if(status === 'paid'){
-      updatedOrder = await Order.findByIdAndUpdate(id, { status: "paid" }, { new: true, updatedAt: new Date() });
+      updatedOrder = await Order.findByIdAndUpdate(_id, { status: "paid" }, { new: true, updatedAt: new Date() });
       if (!updatedOrder) {
         throw new Error('Order not found');
      }
@@ -94,23 +96,12 @@ export const getOrderById = async (req: Request, res: Response) => {
       const user = await User.findById(orderDetails?.user);
       const userEmail = user?.email;
       const orderStatus= updatedOrder?.status;
-      sendEmailConfirmed(userEmail as string, updatedOrder);
-      const productIds = updatedOrder?.products.map((p) => p.product);
-      const quantities = updatedOrder?.products.map((p) => p.quantity);
-      if (productIds && quantities && productIds.length === quantities.length) {
-        const updates = [];
-        for (let i = 0; i < productIds.length; i++) {
-          const productId = productIds[i];
-          const quantity = quantities[i];
-          updates.push(Product.findByIdAndUpdate(productId, { $inc: { stock: -quantity } }).exec());
-        }
-        await Promise.all(updates);
-      } 
-    }
+      
     res.status(200).json({
       alert: "Order status updated",
       order: updatedOrder
     });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
@@ -136,7 +127,7 @@ export const getOrdersByUser = async (req: Request, res: Response) => {
     const orders= await Order.find({ user: userData._id });
     console.log(orders)
     if (orders.length <= 0) {
-      return res.status(404).json({
+      res.status(404).json({
         message: 'No se encontraron órdenes para este usuario.',
       });
     }

@@ -20,7 +20,6 @@ const validationJWT  = async (req: Request, res: Response, next: NextFunction) =
                 msg: 'Token no valido'
             })
             return;
-        
         }
         req.body.userConfirmed = userConfirmed;
         next();
@@ -31,7 +30,6 @@ const validationJWT  = async (req: Request, res: Response, next: NextFunction) =
             msg: 'Token no valido'
         })
     }
-
 }
 
 export default validationJWT;
