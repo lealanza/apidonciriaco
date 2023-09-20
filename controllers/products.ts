@@ -1,6 +1,8 @@
 import Product from "../models/products";
 import { Request, Response, NextFunction } from "express";
 import { Category, ICategory } from "../models/categories";
+import { uploadImages, deleteImages } from '../lib/cloudinary';
+import fs from "fs-extra";
 
 
 export const createProduct = async (
@@ -10,6 +12,17 @@ export const createProduct = async (
   const { title, price, ganancia, stock, description, category } = req.body;
   const images = req.files;
   try {
+    if (!Array.isArray(images))  {
+      throw new Error("No se encontraron imágenes");
+    }
+    const cloudinaryResults = await Promise.all(
+      images.map(async (image) => {
+        const uploadedImage = await uploadImages(image.path);
+        return {path:image.path, public_id: uploadedImage.public_id,  url: uploadedImage.url, secure_url: uploadedImage.secure_url 
+        };
+      })
+      
+    );
     const product = new Product({
       title,
       price,
@@ -17,10 +30,20 @@ export const createProduct = async (
       stock,
       description,
       category,
-      images:images,
+      images:cloudinaryResults,
     });
     await product.save();
-    res.status(201).json({ product });
+    cloudinaryResults.forEach((image) => {
+      fs.unlink(image.path, (err) => {
+          if (err) {
+              console.error(err);
+          }
+      });
+    });
+
+    res.status(201).json({ 
+      product
+     });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error del servidor");
@@ -47,6 +70,7 @@ export const deleteProduct = async (
        res.status(404).json({ msg: "Producto no encontrado" });
        return
     }
+    
     res.status(200).json({ msg: "Producto eliminado" });
   } catch (error) {
     console.error(error);

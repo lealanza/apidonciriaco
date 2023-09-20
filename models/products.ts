@@ -1,7 +1,9 @@
 import mongoose, {Model, model, Document, Schema} from 'mongoose'
 export interface IImage {
-  filename: string;
-  path: string;
+  public_id:string
+  url: string;
+  secure_url:string
+  path:string
 }
 
 interface IProduct extends Document {
@@ -22,7 +24,7 @@ const productSchema = new Schema<IProduct>({
   stock: { type: Number, required: true },
   description: { type: String, required: true },
   category: { type: String, required: true },
-  images: [{ filename: String, path: String }],
+  images: [{ public_id: String, url: String, secure_url: String, path:String }],
   date: { type: Date, default: Date.now },
 });
 

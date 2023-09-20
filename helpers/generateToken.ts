@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv";
+dotenv.config();
 
 export const generateToken = (id: string):Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -11,7 +13,6 @@ export const generateToken = (id: string):Promise<string> => {
             } else {
                 resolve(token as string)
             }
-        
         })
     })
 }

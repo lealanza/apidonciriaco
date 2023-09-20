@@ -5,7 +5,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
   secure: true,
 });
-export async function uploadImages(filePath: string){
+export async function uploadImages(filePath: any){
     return await cloudinary.uploader.upload(filePath,{
         folder:'replit'
     })

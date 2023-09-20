@@ -15,10 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = exports.getProducts = exports.createProduct = void 0;
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
+const cloudinary_1 = require("../lib/cloudinary");
+const fs_extra_1 = __importDefault(require("fs-extra"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, price, ganancia, stock, description, category } = req.body;
     const images = req.files;
     try {
+        if (!Array.isArray(images)) {
+            throw new Error("No se encontraron imágenes");
+        }
+        const cloudinaryResults = yield Promise.all(images.map((image) => __awaiter(void 0, void 0, void 0, function* () {
+            const uploadedImage = yield (0, cloudinary_1.uploadImages)(image.path);
+            return { path: image.path, public_id: uploadedImage.public_id, url: uploadedImage.url, secure_url: uploadedImage.secure_url
+            };
+        })));
         const product = new products_1.default({
             title,
             price,
@@ -26,10 +36,19 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             stock,
             description,
             category,
-            images: images,
+            images: cloudinaryResults,
         });
         yield product.save();
-        res.status(201).json({ product });
+        cloudinaryResults.forEach((image) => {
+            fs_extra_1.default.unlink(image.path, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        });
+        res.status(201).json({
+            product
+        });
     }
     catch (error) {
         console.error(error);

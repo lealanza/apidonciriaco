@@ -4,7 +4,7 @@ import { errorHandler } from "../middlewares/errores";
 import multer from '../lib/multer'
 const productRoutes = Router();
 
-productRoutes.post("/create",multer.array('image',5),errorHandler, createProduct);
+productRoutes.post("/create",multer.array('image'),errorHandler, createProduct);
 productRoutes.get("/get", getProducts)
 productRoutes.delete("/delete/:id", deleteProduct)
 productRoutes.patch("/update/:id",errorHandler, updateProduct)

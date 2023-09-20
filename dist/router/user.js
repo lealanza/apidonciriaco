@@ -11,14 +11,11 @@ userRoutes.post("/create", [(0, express_validator_1.check)('userName', 'El nombr
     (0, express_validator_1.check)('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty(),
     (0, express_validator_1.check)('name', 'El nombre es obligatorio').not().isEmpty(),
     (0, express_validator_1.check)('lastName', 'El apellido es obligatorio').not().isEmpty(),
-    (0, express_validator_1.check)('email').custom(validationDb_1.existingEmail),
-    errores_1.errorHandler,
-], user_1.createUser);
+    (0, express_validator_1.check)('email').custom(validationDb_1.existingEmail)], errores_1.errorHandler, user_1.createUser);
 userRoutes.patch('/verified', [
     (0, express_validator_1.check)('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     (0, express_validator_1.check)('code', 'El codigo es obligatorio').not().isEmpty(),
-    errores_1.errorHandler,
-], user_1.verifiedUser);
+], errores_1.errorHandler, user_1.verifiedUser);
 userRoutes.post('/login', [
     (0, express_validator_1.check)('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     (0, express_validator_1.check)('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty()

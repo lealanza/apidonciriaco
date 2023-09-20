@@ -6,7 +6,6 @@ import routerProduct from '../router/products';
 import categoryRoutes from '../router/categories';
 import cors from 'cors';
 import path from 'path'; 
-import fileUpload from 'express-fileupload';
 
 export class Server{
     app: Express;

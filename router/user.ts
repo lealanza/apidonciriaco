@@ -7,23 +7,20 @@ import { errorHandler } from "../middlewares/errores";
 
 
 
-
 const userRoutes = Router();
-
 userRoutes.post("/create",
     [check('userName', 'El nombre de usuario es obligatorio').not().isEmpty(),
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     check('password', 'La contraseña debe tener al menos 6 caracteres').not().isEmpty(),
     check('name', 'El nombre es obligatorio').not().isEmpty(),
     check('lastName', 'El apellido es obligatorio').not().isEmpty(),
-    check('email').custom(existingEmail),
-    errorHandler,
-], createUser)
+    check('email').custom(existingEmail)],
+    errorHandler, createUser)
 userRoutes.patch('/verified',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     check('code', 'El codigo es obligatorio').not().isEmpty(),
-    errorHandler,
-], verifiedUser)
+], errorHandler,verifiedUser)
+    
 
 
 userRoutes.post('/login',[
