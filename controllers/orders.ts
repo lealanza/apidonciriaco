@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Order, { IOrder } from '../models/orders';
-import { ObjectId } from 'mongodb';
 import User, { IUser } from '../models/users';
 
 export const getOrders = async (req: Request, res: Response) => {
@@ -17,7 +16,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
       alert: "Usuario no registrado",
     });
     return;
-  }
+  } 
   try {
     const userId = userVerified._id;
    const orderNumber = await Order.countDocuments();

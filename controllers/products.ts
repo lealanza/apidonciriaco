@@ -59,6 +59,25 @@ export const getProducts = async (req: Request, res: Response): Promise<void> =>
         res.status(500).send("Error del servidor");
     }
 }
+export const getProductsById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { _id } = req.params;
+    const product = await Product.findById(_id);
+    if (!product) {
+     res.status(404).json({ msg: "Producto no encontrado" });
+     return
+    }
+
+    res.status(200).json({ product  });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const deleteProduct = async (
   req: Request,
   res: Response,

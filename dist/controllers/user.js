@@ -99,12 +99,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         const token = yield (0, generateToken_1.generateToken)(user.id);
-        (0, mailers_1.sendEamilLogin)(email, user.name),
-            res.json({
-                message: "Login Correcto",
-                user,
-                token
-            });
+        res.json({
+            message: "Login Correcto",
+            user,
+            token
+        });
     }
     catch (error) {
         console.log(error);

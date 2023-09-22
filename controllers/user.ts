@@ -90,7 +90,6 @@ export const login = async (req: Request, res: Response) => {
             return
         }
         const token = await generateToken(user.id);
-        sendEamilLogin(email, user.name),
         res.json({
             message: "Login Correcto",
             user,

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = exports.getProducts = exports.createProduct = void 0;
+exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = exports.getProductsById = exports.getProducts = exports.createProduct = void 0;
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
 const cloudinary_1 = require("../lib/cloudinary");
@@ -67,6 +67,21 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProducts = getProducts;
+const getProductsById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { _id } = req.params;
+        const product = yield products_1.default.findById(_id);
+        if (!product) {
+            res.status(404).json({ msg: "Producto no encontrado" });
+            return;
+        }
+        res.status(200).json({ product });
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+exports.getProductsById = getProductsById;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

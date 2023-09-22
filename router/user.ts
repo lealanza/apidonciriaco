@@ -20,8 +20,6 @@ userRoutes.patch('/verified',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
     check('code', 'El codigo es obligatorio').not().isEmpty(),
 ], errorHandler,verifiedUser)
-    
-
 
 userRoutes.post('/login',[
     check('email', 'El email es obligatorio').not().isEmpty().normalizeEmail().isEmail(),
