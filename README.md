@@ -166,3 +166,4 @@ Ruta: GET https://apie-pied.vercel.app/category/get
 -Parámetros de entrada: No se requieren parámetros adicionales.
 -Respuesta exitosa: Devuelve la lista de categorías disponibles.
 -Respuesta de error: Puede devolver errores si la solicitud no es válida o si no se pueden obtener las categorías.
+# apidonciriaco
