@@ -20,6 +20,7 @@ const orders_1 = __importDefault(require("../router/orders"));
 const products_1 = __importDefault(require("../router/products"));
 const categories_1 = __importDefault(require("../router/categories"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 class Server {
     constructor() {
@@ -38,7 +39,7 @@ class Server {
         this.app.use((0, cors_1.default)({ origin: '*' }));
         this.app.use((0, express_fileupload_1.default)({
             useTempFiles: true,
-            tempFileDir: '../images/tmp'
+            tempFileDir: path_1.default.join(__dirname, 'images', 'tmp')
         }));
     }
     router() {

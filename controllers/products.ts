@@ -29,7 +29,7 @@ export const createProduct = async (
         path: result.path,
         secure_url: result.secure_url
       }
-      await fs.unlink(req.files.image.tempFilePath)
+      // await fs.unlink(req.files.image.tempFilePath)
     }
     await product.save();
     res.status(201).json({ 

@@ -16,7 +16,6 @@ exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = 
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
 const cloudinary_1 = require("../lib/cloudinary");
-const fs_extra_1 = __importDefault(require("fs-extra"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { title, price, ganancia, stock, description, category } = req.body;
@@ -37,7 +36,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 path: result.path,
                 secure_url: result.secure_url
             };
-            yield fs_extra_1.default.unlink(req.files.image.tempFilePath);
+            // await fs.unlink(req.files.image.tempFilePath)
         }
         yield product.save();
         res.status(201).json({
