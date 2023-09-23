@@ -36,7 +36,6 @@ export class Server{
                 {origin: '*'}
             
         )); 
-        this.app.use('/uploads',express.static(path.resolve('uploads')));
     }
     router ():void{
         this.app.use(this.createUser, routerUser);
