@@ -27,7 +27,6 @@ export class Server {
         this.app.use(cors({ origin: '*' }));
         this.app.use(fileUpload({
             useTempFiles : true,
-            tempFileDir : './uploads',
         }));
     }
 
