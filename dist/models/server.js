@@ -17,8 +17,6 @@ const express_1 = __importDefault(require("express"));
 const config_1 = require("../lib/config");
 const user_1 = __importDefault(require("../router/user"));
 const orders_1 = __importDefault(require("../router/orders"));
-const products_1 = __importDefault(require("../router/products"));
-const categories_1 = __importDefault(require("../router/categories"));
 const cors_1 = __importDefault(require("cors"));
 class Server {
     constructor() {
@@ -39,8 +37,6 @@ class Server {
     router() {
         this.app.use('/user', user_1.default);
         this.app.use('/order', orders_1.default);
-        this.app.use('/product', products_1.default);
-        this.app.use('/category', categories_1.default);
     }
     listen() {
         const port = process.env.PORT || 3000;

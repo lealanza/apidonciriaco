@@ -2,8 +2,6 @@ import express, { Express } from 'express';
 import { conectDB } from '../lib/config';
 import routerUser from '../router/user';
 import routerOrder from '../router/orders';
-import routerProduct from '../router/products';
-import categoryRoutes from '../router/categories';
 import cors from 'cors';
 import path from 'path'; 
 import fileUpload from 'express-fileupload';
@@ -30,8 +28,6 @@ export class Server {
     router(): void {
         this.app.use('/user', routerUser);
         this.app.use('/order', routerOrder);
-        this.app.use('/product', routerProduct);
-        this.app.use('/category', categoryRoutes);
         
     }
 
