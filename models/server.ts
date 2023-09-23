@@ -6,48 +6,43 @@ import routerProduct from '../router/products';
 import categoryRoutes from '../router/categories';
 import cors from 'cors';
 import path from 'path'; 
+import fileUpload from 'express-fileupload';
 
-export class Server{
+export class Server {
     app: Express;
-    createUser: string;
-    order: string;
-    product: string;
-    category: string;
-    constructor(){
+
+    constructor() {
         this.app = express();
         this.start();
         this.middlewares();
-        this.createUser= "/user"
-        this.order= "/order"
-        this.product="/product"
-        this.category="/category"
         this.router();
     }
 
-    async start ():Promise<void>{
+    async start(): Promise<void> {
         await conectDB();
     }
     
-
-    middlewares ():void{
+    middlewares(): void {
         this.app.use(express.json());
-        this.app.use(cors(
-            
-                {origin: '*'}
-            
-        )); 
+        this.app.use(cors({ origin: '*' }));
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : './uploads',
+        }));
     }
-    router ():void{
-        this.app.use(this.createUser, routerUser);
-        this.app.use(this.order, routerOrder);
-        this.app.use(this.product, routerProduct)
-        this.app.use(this.category, categoryRoutes)
+
+    router(): void {
+        this.app.use('/user', routerUser);
+        this.app.use('/order', routerOrder);
+        this.app.use('/product', routerProduct);
+        this.app.use('/category', categoryRoutes);
         
     }
 
-    listen ():void{
-        this.app.listen(process.env.PORT, () => {
-            console.log(`Server on port ${process.env.PORT}`)
-        })
+    listen(): void {
+        const port = process.env.PORT || 3000;
+        this.app.listen(port, () => {
+            console.log(`Server on port ${port}`);
+        });
     }
 }

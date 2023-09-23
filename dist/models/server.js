@@ -20,15 +20,12 @@ const orders_1 = __importDefault(require("../router/orders"));
 const products_1 = __importDefault(require("../router/products"));
 const categories_1 = __importDefault(require("../router/categories"));
 const cors_1 = __importDefault(require("cors"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.start();
         this.middlewares();
-        this.createUser = "/user";
-        this.order = "/order";
-        this.product = "/product";
-        this.category = "/category";
         this.router();
     }
     start() {
@@ -39,16 +36,21 @@ class Server {
     middlewares() {
         this.app.use(express_1.default.json());
         this.app.use((0, cors_1.default)({ origin: '*' }));
+        this.app.use((0, express_fileupload_1.default)({
+            useTempFiles: true,
+            tempFileDir: './uploads',
+        }));
     }
     router() {
-        this.app.use(this.createUser, user_1.default);
-        this.app.use(this.order, orders_1.default);
-        this.app.use(this.product, products_1.default);
-        this.app.use(this.category, categories_1.default);
+        this.app.use('/user', user_1.default);
+        this.app.use('/order', orders_1.default);
+        this.app.use('/product', products_1.default);
+        this.app.use('/category', categories_1.default);
     }
     listen() {
-        this.app.listen(process.env.PORT, () => {
-            console.log(`Server on port ${process.env.PORT}`);
+        const port = process.env.PORT || 3000;
+        this.app.listen(port, () => {
+            console.log(`Server on port ${port}`);
         });
     }
 }

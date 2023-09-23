@@ -10,19 +10,9 @@ export const createProduct = async (
   res: Response
 ): Promise<void> => {
   const { title, price, ganancia, stock, description, category } = req.body;
-  const images = req.files;
+  
   try {
-    if (!Array.isArray(images))  {
-      throw new Error("No se encontraron imágenes");
-    }
-    const cloudinaryResults = await Promise.all(
-      images.map(async (image) => {
-        const uploadedImage = await uploadImages(image.path);
-        return {path:image.path, public_id: uploadedImage.public_id,  url: uploadedImage.url, secure_url: uploadedImage.secure_url 
-        };
-      })
-      
-    );
+    
     const product = new Product({
       title,
       price,
@@ -30,23 +20,24 @@ export const createProduct = async (
       stock,
       description,
       category,
-      images:cloudinaryResults,
     });
+    if(req.files?.image){
+      const result = await uploadImages(req.files.image.tempFilePath)
+      product.images = {
+        public_id: result.public_id,
+        url: result.secure_url,
+        path: result.path,
+        secure_url: result.secure_url
+      }
+      await fs.unlink(req.files.image.tempFilePath)
+    }
     await product.save();
-    cloudinaryResults.forEach((image) => {
-      fs.unlink(image.path, (err) => {
-          if (err) {
-              console.error(err);
-          }
-      });
-    });
-
     res.status(201).json({ 
       product
-     });
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error del servidor");
+    res.status(500).send(`Error del servidor`);
   }
 };
 

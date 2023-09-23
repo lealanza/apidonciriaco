@@ -19,7 +19,7 @@ const productSchema = new mongoose_1.Schema({
     stock: { type: Number, required: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
-    images: [{ public_id: String, url: String, secure_url: String, path: String }],
+    images: { public_id: String, url: String, secure_url: String, path: String },
     date: { type: Date, default: Date.now },
 });
 productSchema.methods.toJSON = function () {

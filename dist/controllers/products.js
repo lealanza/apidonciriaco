@@ -18,17 +18,9 @@ const categories_1 = require("../models/categories");
 const cloudinary_1 = require("../lib/cloudinary");
 const fs_extra_1 = __importDefault(require("fs-extra"));
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { title, price, ganancia, stock, description, category } = req.body;
-    const images = req.files;
     try {
-        if (!Array.isArray(images)) {
-            throw new Error("No se encontraron imágenes");
-        }
-        const cloudinaryResults = yield Promise.all(images.map((image) => __awaiter(void 0, void 0, void 0, function* () {
-            const uploadedImage = yield (0, cloudinary_1.uploadImages)(image.path);
-            return { path: image.path, public_id: uploadedImage.public_id, url: uploadedImage.url, secure_url: uploadedImage.secure_url
-            };
-        })));
         const product = new products_1.default({
             title,
             price,
@@ -36,23 +28,25 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             stock,
             description,
             category,
-            images: cloudinaryResults,
         });
+        if ((_a = req.files) === null || _a === void 0 ? void 0 : _a.image) {
+            const result = yield (0, cloudinary_1.uploadImages)(req.files.image.tempFilePath);
+            product.images = {
+                public_id: result.public_id,
+                url: result.secure_url,
+                path: result.path,
+                secure_url: result.secure_url
+            };
+            yield fs_extra_1.default.unlink(req.files.image.tempFilePath);
+        }
         yield product.save();
-        cloudinaryResults.forEach((image) => {
-            fs_extra_1.default.unlink(image.path, (err) => {
-                if (err) {
-                    console.error(err);
-                }
-            });
-        });
         res.status(201).json({
             product
         });
     }
     catch (error) {
         console.error(error);
-        res.status(500).send("Error del servidor");
+        res.status(500).send(`Error del servidor`);
     }
 });
 exports.createProduct = createProduct;
