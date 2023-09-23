@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteImages = exports.uploadImages = void 0;
+exports.uploadImage = void 0;
 const cloudinary_1 = require("cloudinary");
 cloudinary_1.v2.config({
     cloud_name: 'ddyg4xvws',
@@ -17,17 +17,16 @@ cloudinary_1.v2.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true,
 });
-function uploadImages(filePath) {
+function uploadImage(fileData) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield cloudinary_1.v2.uploader.upload(filePath, {
-            folder: 'replit'
+        const result = yield cloudinary_1.v2.uploader.upload(fileData.path, {
+            folder: 'replit', // change this to your desired folder name
         });
+        return {
+            public_id: result.public_id,
+            url: result.secure_url,
+            secure_url: result.secure_url,
+        };
     });
 }
-exports.uploadImages = uploadImages;
-function deleteImages(public_id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield cloudinary_1.v2.uploader.destroy(public_id);
-    });
-}
-exports.deleteImages = deleteImages;
+exports.uploadImage = uploadImage;

@@ -1,9 +1,8 @@
 import Product from "../models/products";
 import { Request, Response, NextFunction } from "express";
 import { Category, ICategory } from "../models/categories";
-import { uploadImages, deleteImages } from '../lib/cloudinary';
 import fs from "fs-extra";
-
+import {uploadImage} from '../lib/cloudinary'
 
 export const createProduct = async (
   req: Request,
@@ -21,16 +20,7 @@ export const createProduct = async (
       description,
       category,
     });
-    if(req.files?.image){
-      const result = await uploadImages(req.files.image.tempFilePath)
-      product.images = {
-        public_id: result.public_id,
-        url: result.secure_url,
-        path: result.path,
-        secure_url: result.secure_url
-      }
-      // await fs.unlink(req.files.image.tempFilePath)
-    }
+    
     await product.save();
     res.status(201).json({ 
       product

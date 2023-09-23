@@ -14,7 +14,6 @@ interface IProduct extends Document {
   stock: number;
   description: string;
   category: string;
-  images: IImage;
   date: Date;
 }
 const productSchema = new Schema<IProduct>({
@@ -24,7 +23,6 @@ const productSchema = new Schema<IProduct>({
   stock: { type: Number, required: true },
   description: { type: String, required: true },
   category: { type: String, required: true },
-  images: { public_id: String, url: String, secure_url: String, path:String },
   date: { type: Date, default: Date.now },
 });
 

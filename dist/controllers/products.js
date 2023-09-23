@@ -15,9 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProductsByCategory = exports.updateProduct = exports.deleteProduct = exports.getProductsById = exports.getProducts = exports.createProduct = void 0;
 const products_1 = __importDefault(require("../models/products"));
 const categories_1 = require("../models/categories");
-const cloudinary_1 = require("../lib/cloudinary");
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { title, price, ganancia, stock, description, category } = req.body;
     try {
         const product = new products_1.default({
@@ -28,16 +26,6 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             description,
             category,
         });
-        if ((_a = req.files) === null || _a === void 0 ? void 0 : _a.image) {
-            const result = yield (0, cloudinary_1.uploadImages)(req.files.image.tempFilePath);
-            product.images = {
-                public_id: result.public_id,
-                url: result.secure_url,
-                path: result.path,
-                secure_url: result.secure_url
-            };
-            // await fs.unlink(req.files.image.tempFilePath)
-        }
         yield product.save();
         res.status(201).json({
             product

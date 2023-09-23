@@ -1,4 +1,5 @@
 import Router from "express";
+import multer from "multer";
 import { createProduct, deleteProduct, getProducts,getProductsById, getProductsByCategory, updateProduct } from "../controllers/products";
 import { errorHandler } from "../middlewares/errores";
 

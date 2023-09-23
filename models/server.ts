@@ -25,10 +25,6 @@ export class Server {
     middlewares(): void {
         this.app.use(express.json());
         this.app.use(cors({ origin: '*' }));
-        this.app.use(fileUpload({
-            useTempFiles:true,
-            tempFileDir: path.join(__dirname, 'images', 'tmp')
-        }));
     }
 
     router(): void {
