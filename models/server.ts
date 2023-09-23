@@ -26,7 +26,8 @@ export class Server {
         this.app.use(express.json());
         this.app.use(cors({ origin: '*' }));
         this.app.use(fileUpload({
-            useTempFiles : true,
+            useTempFiles:true,
+            tempFileDir:'../images/tmp'
         }));
     }
 

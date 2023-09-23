@@ -38,6 +38,7 @@ class Server {
         this.app.use((0, cors_1.default)({ origin: '*' }));
         this.app.use((0, express_fileupload_1.default)({
             useTempFiles: true,
+            tempFileDir: '../images/tmp'
         }));
     }
     router() {
